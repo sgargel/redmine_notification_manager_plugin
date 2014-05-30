@@ -46,14 +46,18 @@ module Notification
         @changed_attributes.each_key do |n|
           changed_array << n
         end
-        
+
         critical_fields = notification_array & changed_array
         
         Thread.current[:is_issue_change] = true
         if critical_fields.length > 0
           Thread.current[:send_notification_email] = true
+          Rails.logger.debug("Critical fields changed")
+        else
+          Thread.current[:send_notification_email] = false unless Thread.current[:send_notification_email]
+          Rails.logger.debug("Critical fields not changed")
         end
-        
+
         # The method must return true. Otherwise, the save action would abort.
         true
       end

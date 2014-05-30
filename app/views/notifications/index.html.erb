@@ -2,19 +2,23 @@
 <p>Check the fields below, for which you wish to generate a notification, if their value gets changed.</p>
 
 <% if @project_identifier %>
-<% form_tag("/notifications/edit", :id => 'notification_form' ) do %>
+<%= form_tag({ :controller => 'notifications', :action => 'edit', :project_id => @project[:id] },
+            :method => :post, :id => 'notification_form') do %> 
   
   <div class="autoscroll">
   
     <%= hidden_field_tag 'project_id', @project_identifier %>
     
-    <table class="list">
+    <table class="list" border="1">
     
       <thead>
         <tr>
           <th></th>
+        <% @special_columns.each do |c| %>
+          <th><%= l_or_humanize((c).to_sym) %></th>
+        <% end %>
         <% @columns.each do |c| %>
-          <th><%= l_or_humanize(('field_' + c).to_sym) %></th>
+          <th><%= l_or_humanize((c).to_sym) %></th>
         <% end %>
         <% @custom_columns.each do |c| %>
           <th><%= c.name %></th>
@@ -26,6 +30,10 @@
       <% @trackers.each do |t| %>
         <tr class="<%= cycle('odd', 'even') %>">
           <td><%= t.name %></td>
+        <% @special_columns.each do |c| %>
+        <td align="center"><input <% if @state[t.id][c.to_sym] == :checked then %>checked="checked"<% end %> 
+          name="notification[<%= t.id %>][<%= c %>]" type="checkbox" /></td>
+        <% end %>
         <% @columns.each do |c| %>
         <td align="center"><input <% if @state[t.id][c.to_sym] == :checked then %>checked="checked"<% end %> 
           name="notification[<%= t.id %>][<%= c %>]" type="checkbox" /></td>

@@ -25,7 +25,8 @@ class IssueHook < Redmine::Hook::ViewListener
     
     params = context[:params]
     issue = context[:issue]
-    
+    Thread.current[:send_notification_email] = false
+
     if params[:issue] then
     
       project_id = issue[:project_id]
@@ -58,7 +59,15 @@ class IssueHook < Redmine::Hook::ViewListener
           end
         end
       end
-     
+
+      # check if a note was added (this parameter is not available 
+      # in the before_save rails callback used in issue_patch.rb, as it is dealt with by the journal)
+      if params[:issue][:notes]
+        if params[:issue][:notes].size > 0
+          changed_array << 'notes'
+        end
+      end
+
       
       # Read notification settings from DB
       notifications = NotificationSetting.find(:all, :conditions => {:project_id => project_id, :tracker_id => tracker_id})
@@ -78,8 +87,13 @@ class IssueHook < Redmine::Hook::ViewListener
       critical_fields = notification_array & changed_array
 
       Thread.current[:is_issue_change] = true
+
       if critical_fields.length > 0
         Thread.current[:send_notification_email] = true
+        Rails.logger.debug("Critical custom fields changed")
+      else
+        Thread.current[:send_notification_email] = false unless Thread.current[:send_notification_email]
+        Rails.logger.debug("Critical custom fields not changed")
       end
         
     end

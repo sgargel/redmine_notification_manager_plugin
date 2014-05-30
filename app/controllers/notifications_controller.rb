@@ -12,11 +12,12 @@ class NotificationsController < ApplicationController
     @notifications = NotificationSetting.find(:all, :conditions => {:project_id => @project[:id]})
     
     result = NotificationSetting.get_trackers_and_columns @project
-    
+
     @trackers = result[:trackers]
     @columns = result[:columns]
     @custom_columns = result[:custom_columns]
     @custom_columns_use = result[:custom_columns_use]
+    @special_columns = result[:special_columns]
     @state = result[:state]
     
   end

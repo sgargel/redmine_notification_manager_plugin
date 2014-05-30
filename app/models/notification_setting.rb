@@ -3,7 +3,7 @@ class NotificationSetting < ActiveRecord::Base
   belongs_to :project
   
   def self.get_trackers_and_columns project
-    
+
     state = []
     
     # Get the default column names
@@ -48,6 +48,12 @@ class NotificationSetting < ActiveRecord::Base
       end
     end
     
+    # Adding an option for Notes which is neither a field nor an attribute (saved in journals)
+    special_columns = ['notes']
+    trackers.each do |t|
+      state[t.id]['notes'] = :checkbox
+    end
+
     # Get the currently selected values
     currently_selected = NotificationSetting.find(:all, :conditions => {:project_id => project[:id]})
     if currently_selected.length == 0 then
@@ -71,7 +77,7 @@ class NotificationSetting < ActiveRecord::Base
     end
       
     {:trackers => trackers, :columns => columns, :custom_columns => custom_columns, \
-      :custom_columns_use => custom_columns_use, :state => state}
+      :custom_columns_use => custom_columns_use, :special_columns => special_columns, :state => state}
   end
   
 end
