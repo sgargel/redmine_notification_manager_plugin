@@ -19,8 +19,8 @@ h2. Usage
 # If you check all the checkboxes for a project, notifications will be sent as if there was no plugin installed.
 
 h2. TODO
+Solve incompatibility with the Redmine-reminder plugin
 
-Check compatibility with different versions of redmine and different database systems. This plugin was developed for "Redmine 0.9.3.stable (MySQL)".
 
 h2. License
 

@@ -35,7 +35,7 @@ class IssueHook < Redmine::Hook::ViewListener
       
       # Old values (before changes)
       old_values = {}
-      custom_old = CustomValue.find(:all, :conditions => {:customized_id => issue_id, :customized_type => 'Issue'})
+      custom_old = CustomValue.where(:customized_id => issue_id, :customized_type => 'Issue')
       custom_old.each do |c|
         old_values[c.custom_field_id] = c.value
       end
@@ -70,7 +70,7 @@ class IssueHook < Redmine::Hook::ViewListener
 
       
       # Read notification settings from DB
-      notifications = NotificationSetting.find(:all, :conditions => {:project_id => project_id, :tracker_id => tracker_id})
+      notifications = NotificationSetting.where(:project_id => project_id, :tracker_id => tracker_id)
       
       # Default behavior if there are no notification settings available
       if notifications.length == 0

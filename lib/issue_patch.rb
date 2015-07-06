@@ -28,7 +28,7 @@ module Notification
       def is_notification_necessary
       
         # Get the settings
-        notifications = NotificationSetting.find(:all, :conditions => {:project_id => self.project_id, :tracker_id => self.tracker_id})
+        notifications = NotificationSetting.where(:project_id => self.project_id, :tracker_id => self.tracker_id)
         
         # Default behavior if there are no notification settings available
         if notifications.length == 0

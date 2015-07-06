@@ -9,7 +9,7 @@ class NotificationsController < ApplicationController
     @project = Project.find(params[:project_id])
     
     # Find all the entries that belong to the selected project
-    @notifications = NotificationSetting.find(:all, :conditions => {:project_id => @project[:id]})
+    @notifications = NotificationSetting.where(:project_id => @project[:id])
     
     result = NotificationSetting.get_trackers_and_columns @project
 

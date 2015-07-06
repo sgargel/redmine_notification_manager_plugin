@@ -32,7 +32,7 @@ Redmine::Plugin.register :redmine_notification_manager_plugin do
   author      'Adrian Herzog, Applify'
   description 'Enables users to configure Redmine email notifications ' +
               'for their actions'
-  version     '0.2.1'
+  version     '0.2.2'
   
   permission :notifications, {:notifications => [:index, :edit]}, :public => true
   menu :project_menu, :notifications, { :controller => 'notifications', :action => 'index' }, :caption => 'Notifications', :after => :settings, :param => :project_id

@@ -28,7 +28,7 @@ class NotificationSetting < ActiveRecord::Base
 
     
     # Get all custom columns
-    custom_columns = CustomField.find(:all, :conditions => { :type => 'IssueCustomField'}, :order => 'position ASC')
+    custom_columns = CustomField.where(:type => 'IssueCustomField').order('position ASC')
     
     # Get the custom columns use
     custom_fields = CustomField.find_by_sql("SELECT id, type, position, tracker_id  
@@ -55,7 +55,7 @@ class NotificationSetting < ActiveRecord::Base
     end
 
     # Get the currently selected values
-    currently_selected = NotificationSetting.find(:all, :conditions => {:project_id => project[:id]})
+    currently_selected = NotificationSetting.where(:project_id => project[:id])
     if currently_selected.length == 0 then
       # Mark all fields as checked (default behaviour)
       state.each_index do |t|
