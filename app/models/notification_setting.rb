@@ -1,6 +1,7 @@
 class NotificationSetting < ActiveRecord::Base
 
   belongs_to :project
+  attr_accessible :project_id, :tracker_id, :field
   
   def self.get_trackers_and_columns project
 
