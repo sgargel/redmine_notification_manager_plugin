@@ -1,5 +1,6 @@
 # Checks whether any DEFAULT fields were changed that need notification
 # CUSTOM fields are checked in issue_hooks.rb
+require_dependency 'issue'
 
 
 module Notification
@@ -63,4 +64,8 @@ module Notification
       end
     end 
   end
+end
+
+unless Issue.included_modules.include? Notification::IssuePatch
+  Issue.send(:include, Notification::IssuePatch)
 end

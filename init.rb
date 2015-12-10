@@ -1,30 +1,8 @@
 require 'redmine'
-require 'dispatcher' unless Rails::VERSION::MAJOR >= 3
 
 require 'issue_patch'
 require 'action_mailer_base_extensions'
-Rails.logger.info 'Starting Notification Manager plugin for Redmine'
-
-if Rails::VERSION::MAJOR >= 3
-  ActionDispatch::Callbacks.to_prepare do
-    require_dependency 'issue'
-    # Guards against including the module multiple time (like in tests)
-    # and registering multiple callbacks
-    unless Issue.included_modules.include? Notification::IssuePatch
-      Issue.send(:include, Notification::IssuePatch)
-    end
-  end
-else
-  Dispatcher.to_prepare do
-    require_dependency 'issue'
-    # Guards against including the module multiple time (like in tests)
-    # and registering multiple callbacks
-    unless Issue.included_modules.include? Notification::IssuePatch
-      Issue.send(:include, Notification::IssuePatch)
-    end
-  end
-end
-require_dependency 'issue_hooks'
+require 'issue_hooks'
 
 Redmine::Plugin.register :redmine_notification_manager_plugin do
 
@@ -34,8 +12,7 @@ Redmine::Plugin.register :redmine_notification_manager_plugin do
               'for their actions'
   version     '0.2.2'
   
-  permission :notifications, {:notifications => [:index, :edit]}, :public => true
-  menu :project_menu, :notifications, { :controller => 'notifications', :action => 'index' }, :caption => 'Notifications', :after => :settings, :param => :project_id
-
+  permission :notifications, { :notifications => [:index, :edit] }
+  menu :project_menu, :notifications, { :controller => 'notifications', :action => 'index' }, :caption => :label_notification_tab, :after => :settings, :param => :project_id
 end
 
