@@ -11,7 +11,7 @@ class CreateNotificationSettings < ActiveRecord::Migration
 
     end
     # This is a ugly way to achieve inheritance goal using mysql triggers
-    # DO NOT USE IN IN PRODUCTION :-P
+    # USE IN PRODUCTION AT YOUR OWN RISK
     execute <<-_SQL
     CREATE DEFINER=`redmine_default`@`localhost` TRIGGER `trg_upd_subproject_inherit_notification_settings` AFTER UPDATE ON `projects` FOR EACH ROW BEGIN
     INSERT INTO notification_settings
